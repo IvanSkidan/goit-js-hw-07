@@ -34,15 +34,25 @@ function handleClick(event) {
     return;
   };
 
-  const source = event.target.dataset.source;
-  const instance = basicLightbox.create(`<img src="${source}" width="800" height="600">`);
+  const instance = basicLightbox.create(`
+  <img src="${event.target.dataset.source}" width="800" height="600">`,
+    {
+      onShow: (instance) => {
+        window.addEventListener("keydown", onKeydownEsc);
+      },
 
-  instance.show(window.addEventListener("keydown", onKeydownEsc));
+      onClose: (instance) => {
+        window.removeEventListener("keydown", onKeydownEsc);
+      },
+    }
+  );
+  
+  instance.show();
 
   // Перевірка натиску клавіші Escape
   function onKeydownEsc(event) {
     if (event.code === "Escape") {
-      instance.close(window.removeEventListener("keydown", onKeydownEsc));
+      instance.close();
     };
   }
 }
@@ -59,25 +69,15 @@ function handleClick(event) {
 //     return;
 //   };
 
-//   const instance = basicLightbox.create(`
-//   <img src="${event.target.dataset.source}" width="800" height="600">`,
-//     {
-//       onShow: (instance) => {
-//         window.addEventListener("keydown", onKeydownEsc);
-//       },
+//   const source = event.target.dataset.source;
+//   const instance = basicLightbox.create(`<img src="${source}" width="800" height="600">`);
 
-//       onClose: (instance) => {
-//         window.removeEventListener("keydown", onKeydownEsc);
-//       },
-//     }
-//   );
-  
-//   instance.show();
+//   instance.show(window.addEventListener("keydown", onKeydownEsc));
 
 //   // Перевірка натиску клавіші Escape
 //   function onKeydownEsc(event) {
 //     if (event.code === "Escape") {
-//       instance.close();
+//       instance.close(window.removeEventListener("keydown", onKeydownEsc));
 //     };
 //   }
 // }
